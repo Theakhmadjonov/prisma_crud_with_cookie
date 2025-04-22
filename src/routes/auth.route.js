@@ -1,16 +1,18 @@
 import { Router } from "express";
-import UserController from "../controllers/user.controller.js";
+import AuthController from "../controllers/auth.controller.js";
+import AuthMiddleware from "../middlewares/auth.middleware.js";
+import RoleMiddleware from "../middlewares/role.middleware.js";
 
-const userRouter = Router();
+const authRouter = Router();
 
-const controller = new UserController();
+const controller = new AuthController();
 
-userRouter.get("/user", controller.getAllUsersController.bind(controller));
-userRouter.get("/user/:id", controller.getOneUserController.bind(controller));
-userRouter.put("/user:id", controller.updateUserController.bind(controller));
-userRouter.delete(
-  "/user/:id",
-  controller.deleteUserController.bind(controller)
+authRouter.post(
+  "/auth/register",
+  AuthMiddleware,
+  RoleMiddleware("admin"),
+  controller.registerController.bind(controller)
 );
+authRouter.post("/auth/login", controller.loginController.bind(controller));
 
-export default userRouter;
+export default authRouter;
