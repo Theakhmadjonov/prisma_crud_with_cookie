@@ -1,5 +1,6 @@
 import express from "express";
 import Routes from "./routes.js";
+import cookieParser from "cookie-parser";
 import { PrismaClient } from "@prisma/client";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import "dotenv/config";
@@ -7,6 +8,7 @@ import "dotenv/config";
 const app = express();
 export const prisma = new PrismaClient();
 
+app.use(cookieParser());
 app.use(express.json());
 app.use("/api", Routes());
 app.use(errorMiddleware);
